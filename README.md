@@ -23,7 +23,7 @@ ollama pull qwen2:7b-instruct
 
 ## Setup
 
-1. Place your markdown documentation files in the `data_raw/` folder
+1. Place your documentation files in the `data_raw/` folder
 
 2. Run the ingestion script to create the FAISS index:
    ```bash

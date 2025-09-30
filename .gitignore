@@ -31,9 +31,7 @@ wheels/
 *~
 
 # Project specific
-data_raw/
 index/
-prompts/
 
 # Environment variables
 .env

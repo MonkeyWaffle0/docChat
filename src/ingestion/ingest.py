@@ -3,36 +3,47 @@ from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_ollama import OllamaEmbeddings
+from langchain_community.document_loaders import PyPDFLoader
 
-DATA_DIR = Path("../../data_raw")
-INDEX_DIR = Path("../../index/faiss")
-INDEX_DIR.parent.mkdir(parents=True, exist_ok=True)
+from src.utils.constants import ensure_dirs, DATA_DIR, INDEX_DIR
 
-def load_markdown_docs(root: Path) -> list[Document]:
+
+def load_documents(root: Path) -> list[Document]:
     docs: list[Document] = []
-    for p in root.rglob("*.md"):
-        # If you have encoding edge cases, change to errors="ignore"
-        text = p.read_text(encoding="utf-8")
-        docs.append(Document(page_content=text, metadata={"source": str(p)}))
+    extensions = ["*.md", "*.txt", "*.adoc", "*.pdf"]
+
+    for ext in extensions:
+        for p in root.rglob(ext):
+            if ext == "*.pdf":
+                loader = PyPDFLoader(str(p))
+                pdf_docs = loader.load()
+                for doc in pdf_docs:
+                    doc.metadata["source"] = str(p)
+                docs.extend(pdf_docs)
+            else:
+                text = p.read_text(encoding="utf-8")
+                docs.append(Document(page_content=text, metadata={"source": str(p)}))
+
     return docs
 
 def main():
-    print("Loading markdown files...")
-    raw_docs = load_markdown_docs(DATA_DIR)
+    ensure_dirs()
+    print("Loading documents (.md, .pdf, .txt, .adoc)...")
+    raw_docs = load_documents(DATA_DIR)
     if not raw_docs:
-        raise SystemExit("No .md files found in ./data_raw")
+        raise SystemExit("No supported files found in data directory")
 
     print(f"Loaded {len(raw_docs)} docs. Chunking...")
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,       # good default
-        chunk_overlap=150,     # small overlap helps coherence
+        chunk_size=1000,
+        chunk_overlap=150,
         separators=["\n\n", "\n", " ", ""],
     )
     chunks = splitter.split_documents(raw_docs)
     print(f"Created {len(chunks)} chunks.")
 
     print("Creating embeddings with Ollama...")
-    embeddings = OllamaEmbeddings(model="nomic-embed-text")  # or "mxbai-embed-large"
+    embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
     print("Building FAISS index...")
     vs = FAISS.from_documents(chunks, embedding=embeddings)
