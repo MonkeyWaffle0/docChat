@@ -37,7 +37,7 @@ def main():
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
         chunk_overlap=150,
-        separators=["\n\n", "\n", " ", ""],
+        separators=["\n---\n", "\n## ", "\n\n", "\n"],
     )
     chunks = splitter.split_documents(raw_docs)
     print(f"Created {len(chunks)} chunks.")
