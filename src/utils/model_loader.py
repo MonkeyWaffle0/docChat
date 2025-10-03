@@ -12,14 +12,19 @@ def load_system_prompt() -> str:
     return "You are a helpful assistant."
 
 
-def load_retriever(k: int = 4):
+def load_retriever(k: int = 3):
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
     vs = FAISS.load_local(str(INDEX_DIR), embeddings, allow_dangerous_deserialization=True)
-    return vs.as_retriever(search_type="mmr", search_kwargs={"k": k})
+    return vs.as_retriever(search_type="similarity",
+                           search_kwargs={"k": k})
 
 
 def load_llm():
-    return ChatOllama(model="qwen2:7b-instruct", temperature=0.2, num_ctx=8192)
+    return ChatOllama(model="qwen2:7b-instruct",
+                      temperature=0.0,
+                      top_p=1.0,
+                      num_ctx=8192,
+                      seed=42)
 
 
 def format_docs(docs: list[Document]) -> str:

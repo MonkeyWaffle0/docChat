@@ -26,6 +26,7 @@ def load_documents(root: Path) -> list[Document]:
 
     return docs
 
+
 def main():
     ensure_dirs()
     print("Loading documents (.md, .pdf, .txt, .adoc)...")
@@ -37,7 +38,7 @@ def main():
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
         chunk_overlap=150,
-        separators=["\n\n", "\n", " ", ""],
+        separators=["\n---\n", "\n## ", "\n\n", "\n"],
     )
     chunks = splitter.split_documents(raw_docs)
     print(f"Created {len(chunks)} chunks.")
@@ -51,6 +52,7 @@ def main():
     print(f"Saving FAISS index to {INDEX_DIR} ...")
     vs.save_local(str(INDEX_DIR))
     print("Done.")
+
 
 if __name__ == "__main__":
     main()

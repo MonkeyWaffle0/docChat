@@ -1,0 +1,19 @@
+services:
+  docchat:
+    build: .
+    container_name: docchat-rag
+    image: docchat-rag
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./data_raw:/app/data_raw
+      - ./index:/app/index
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=http://localhost:11434
+      - OLLAMA_DEBUG=0
+      - OLLAMA_LLM_LIBRARY=cpu
+    command: []
+
+volumes:
+  ollama_data:
