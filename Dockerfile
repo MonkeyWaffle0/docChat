@@ -15,8 +15,12 @@ RUN pip install --no-cache-dir \
     langchain-text-splitters \
     langchain-community \
     langchain-ollama \
-    faiss-cpu
-
+    faiss-cpu \
+    beautifulsoup4 \
+    lxml \
+    validators \
+    tldextract 
+    
 COPY src/ /app/src/
 COPY prompts/ /app/prompts/
 COPY README.md /app/
