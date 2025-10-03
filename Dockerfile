@@ -8,7 +8,10 @@ RUN curl -fsSL https://ollama.com/install.sh | sh
 
 WORKDIR /app
 
+RUN mkdir -p /app/logs
+
 ENV PYTHONPATH=/app
+ENV OLLAMA_LOG_FILE=/app/logs/ollama.log
 
 RUN pip install --no-cache-dir \
     langchain-core \
