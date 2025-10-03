@@ -26,6 +26,7 @@ def load_documents(root: Path) -> list[Document]:
 
     return docs
 
+
 def main():
     ensure_dirs()
     print("Loading documents (.md, .pdf, .txt, .adoc)...")
@@ -51,6 +52,7 @@ def main():
     print(f"Saving FAISS index to {INDEX_DIR} ...")
     vs.save_local(str(INDEX_DIR))
     print("Done.")
+
 
 if __name__ == "__main__":
     main()

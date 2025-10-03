@@ -1,6 +1,14 @@
 from argparse import ArgumentParser
+import logging
 
 from src.bot.InteractiveBot import InteractiveBot
+
+# Suppress verbose logging from langchain and other libraries
+logging.getLogger("langchain").setLevel(logging.WARNING)
+logging.getLogger("langchain_core").setLevel(logging.WARNING)
+logging.getLogger("langchain_community").setLevel(logging.WARNING)
+logging.getLogger("langchain_ollama").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 def main():
