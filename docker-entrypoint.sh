@@ -11,6 +11,8 @@ sleep 5
 ollama pull nomic-embed-text  >"$OLLAMA_LOG_FILE" 2>&1
 ollama pull qwen2:7b-instruct  >"$OLLAMA_LOG_FILE" 2>&1
 
+#exec python src/ingestion/ingest.py "$@"
+
 echo ""
 echo "=========================================="
 echo "Chatbot is ready!"

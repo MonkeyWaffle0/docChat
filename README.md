@@ -60,3 +60,14 @@ The system uses:
 - **qwen2:7b-instruct** as the language model
 - **FAISS** for efficient vector similarity search
 - **LangChain** for RAG orchestration
+
+## Using by docker
+
+ - Download & Install python (https://www.python.org/downloads/)
+ - Download & Install Docker (https://docs.docker.com/desktop/setup/install/windows-install/)
+ - Clone de repo https://github.com/MonkeyWaffle0/docChat
+ - Add at the folder ../data_raw the documentation you want to use.
+ - Run the following command from the project root folder `py -m src.ingestion.ingest` (It will index the given documentation)
+ - Create the docker image ```bash docker-compose build``` using the cmd.
+ - Run the image just created ```docker-compose run --rm docchat``` using the cmd.
+ - Enjoy
